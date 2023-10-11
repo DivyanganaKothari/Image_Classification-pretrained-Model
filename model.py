@@ -30,6 +30,7 @@ class Model:
         self.model = models.mobilenet_v2(pretrained=True)
         num_features = self.model.classifier[1].in_features  # Get the number of input features from the pretrained model
         self.model.classifier[1] = nn.Linear(num_features, num_classes)
+        self.model_state = None  # model-specific state to reset
 
 
     def train(self, class_counters, num_epochs):
@@ -37,6 +38,7 @@ class Model:
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
         ])
+
 
         img_list = []
         class_list = []
@@ -89,3 +91,7 @@ class Model:
             outputs = self.model(frame_tensor)
             _, predicted = torch.max(outputs, 1)
             return predicted.item()
+
+    def reset(self):
+        # Reset any state or knowledge related to objects
+        self.model_state = None  # Reset model-specific state if applicable

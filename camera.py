@@ -25,3 +25,5 @@ class Camera:
                 return (ret, cv.cvtColor(frame, cv.COLOR_BGR2RGB))
             else:
                 return None
+
+
