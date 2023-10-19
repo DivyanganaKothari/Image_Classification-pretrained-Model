@@ -35,6 +35,7 @@ class Model:
 
     def train(self, class_counters, num_epochs):
         transform = transforms.Compose([
+            transforms.RandomHorizontalFlip(),  # Randomly flip images horizontally
             transforms.Resize((224, 224)),
             transforms.ToTensor(),
         ])

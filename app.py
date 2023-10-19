@@ -19,7 +19,7 @@ class App:
         self.window_title = window_title
         self.window.title("Fraunhofer")
 
-        self.window.configure(bg="light gray")  # Change the background color
+        self.window.configure()
         self.num_classes = None
         self.is_model_trained = False
         self.counters = []
@@ -37,12 +37,15 @@ class App:
         #self.model_instance = model.Model(num_classes=self.num_classes)
         self.auto_predict = False
 
+
         self.camera = camera.Camera()
 
         self.delay = 15
         self.init_gui()
         self.window.attributes("-topmost", True)
         self.update()
+        self.auto_predict_off()
+
         self.current_row = 1
 
         self.window.mainloop()
@@ -148,6 +151,10 @@ class App:
         else:
             self.btn_auto_predict.config(bg="#D0D0E9")
 
+    def auto_predict_off(self):
+        self.auto_predict = False
+        self.btn_auto_predict.config(bg="#D0D0E9")
+
     def update(self):
        if self.auto_predict:
             print(self.predict())
@@ -213,7 +220,7 @@ class App:
                                 img.close()
                             os.unlink(file_path)
 
-
+            self.auto_predict_off()
             # Clear the model's knowledge of objects
             self.model.reset()
 
@@ -241,7 +248,7 @@ class App:
         if not os.path.exists(str(class_num)):
             os.mkdir(str(class_num))
 
-        file_path = f'{class_num}/frame{self.counters[class_num - 1]}.jpg'
+        file_path = f'{class_num}/frame{self.counters[class_num]}.jpg'
         print("Saving image to:", file_path)
 
         cv.imwrite(file_path, frame)
@@ -249,4 +256,4 @@ class App:
         img.thumbnail((150, 150), Image.LANCZOS)
         img.save(file_path)
 
-        self.counters[class_num - 1] += 1
+        self.counters[class_num] += 1
